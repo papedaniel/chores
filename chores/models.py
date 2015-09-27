@@ -4,9 +4,23 @@ from django.template.defaultfilters import slugify
 from datetime import datetime
 from django.contrib.auth.models import User
 
+class History(models.Model):
+    chore = models.ForeignKey('chores.Chores')
+    complete_date = models.DateTimeField(default=datetime.now)
+    user = models.ForeignKey(User, null=True, blank=True)
+
+    class Meta:
+        ordering = ('-complete_date', '-id')
+
+    def __unicode__(self):
+        return '{} {}'.format(self.comment, self.blog)
+
+
 class Chores(models.Model):
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
+    category = models.ForeignKey('chores.Category')
+    user = models.ForeignKey(User, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.id:
