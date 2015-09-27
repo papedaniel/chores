@@ -4,43 +4,26 @@ from django.template.defaultfilters import slugify
 from datetime import datetime
 from django.contrib.auth.models import User
 
-class Comment(models.Model):
-    comment = models.TextField()
-    publishDate = models.DateTimeField(default=datetime.now)
-    blog = models.ForeignKey('blog.Blog')
-    user = models.ForeignKey(User, null=True, blank=True)
-
-    class Meta:
-        ordering = ('-publishDate', '-id')
-
-    def __unicode__(self):
-        return '{} {}'.format(self.comment, self.blog)
-
-class Blog(models.Model):
+class Chores(models.Model):
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
-    body = models.TextField()
-    posted = models.DateTimeField(default=datetime.now)
-    edited = models.DateTimeField(default=datetime.now)
-    published = models.BooleanField(default=False, null=False)
-    category = models.ForeignKey('blog.Category')
-    user = models.ForeignKey(User, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.id:
             self.slug = slugify(self.title)
 
-        super(Blog, self).save()
+        super(Chores, self).save()
 
     def __unicode__(self):
         return '{}'.format(self.title)
 
     class Meta:
-        ordering = ('-published', '-posted', '-id')
+        ordering = ('-id', )
 
     @permalink
     def get_absolute_url(self):
         return 'view_blog_post', None, {'slug': self.slug}
+
 
 class Category(models.Model):
     title = models.CharField(max_length=100, db_index=True)
@@ -60,4 +43,4 @@ class Category(models.Model):
 
     @permalink
     def get_absolute_url(self):
-        return 'view_blog_category', None, {'slug': self.slug}
+        return 'view_category', None, {'slug': self.slug}

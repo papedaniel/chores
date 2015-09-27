@@ -72,12 +72,12 @@ WSGI_APPLICATION = 'house.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        # 'NAME': 'd3mn4pqejk8du9',
-        # 'USER': 'cwirjmwcdcvfjs',
-        # 'PASSWORD': 'PSYS9P_Hg8C-mg7UpUMkJQyWh4',
-        # 'HOST': 'ec2-54-83-59-154.compute-1.amazonaws.com',
-        # 'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd63dddljic34v0',
+        'USER': 'einfbccfwuwrdi',
+        'PASSWORD': 'JX_vpo-6Jq3F7-fBm3-m3wxmow',
+        'HOST': 'ec2-54-163-228-109.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
