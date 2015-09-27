@@ -11,22 +11,16 @@ from datetime import datetime
 
 # Create your views here.
 
-from chores.models import Blog, Category, Comment
+from chores.models import Chores, Category
 
 
 def index(request):
 
-    categories = category_count()
-    posts = Blog.objects.filter(published='True')
-    top3posts = Blog.objects.filter(published='True')[:3]
-    next3posts = Blog.objects.filter(published='True')[3:6]
+    chores = Chores.objects.all()
     search_form = SearchForm()
 
     return render_to_response('index.html', {
-        'categories': categories,
-        'posts': posts,
-        'top3posts': top3posts,
-        'next3posts': next3posts,
+        'chores': chores,
         'search_form': search_form,
         },
         context_instance=RequestContext(request)
@@ -34,115 +28,28 @@ def index(request):
 
 
 def view_post(request, slug):
-    post = get_object_or_404(Blog.objects.filter(slug=slug))
-    comments = Comment.objects.filter(blog_id=post.id)
-    user = request.user
+    post = get_object_or_404(Chores.objects.filter(slug=slug))
 
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
+    chores = Chores.objects.all()
 
-        if not request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('view_post', args=[post.slug]))
-
-        if form.is_valid():
-            new_comment = form.save(commit=False)
-            new_comment.blog_id = post.id
-            new_comment.user = request.user
-            new_comment.save()
-
-        return HttpResponseRedirect(reverse('view_post', args=[post.slug]))
-
-    if post.published:
-        categories = category_count()
-        posts = Blog.objects.filter(published='True')
-        form = CommentForm()
-
-        return render_to_response(
-            'view_post.html', {
-                'post': post,
-                'comments': comments,
-                'form': form,
-                'categories': categories,
-                'posts': posts,
-            },
-            context_instance=RequestContext(request)
-        )
-    else:
-        if user.is_superuser:
-            categories = category_count()
-            posts = Blog.objects.filter(published='True')
-            form = CommentForm()
-
-            return render_to_response(
-                'view_post.html', {
-                    'post': post,
-                    'comments': comments,
-                    'form': form,
-                    'categories': categories,
-                    'posts': posts,
-                },
-                context_instance=RequestContext(request)
-            )
-
-        else:
-            # this is the same code as in the index view. Can just call index view instead?
-            categories = category_count()
-            posts = Blog.objects.filter(published='True')
-            top3posts = Blog.objects.filter(published='True')[:3]
-            next3posts = Blog.objects.filter(published='True')[3:6]
-
-            return render_to_response('index.html', {
-                'categories': categories,
-                'posts': posts,
-                'top3posts': top3posts,
-                'next3posts': next3posts,
-                },
-                context_instance=RequestContext(request)
-            )
-
-
-def view_category(request, slug):
-    category = get_object_or_404(Category, slug=slug)
-    categoryposts = Blog.objects.filter(category=category).filter(published='True')
-    categories = category_count()
-    posts = Blog.objects.filter(published='True')
-
-    return render_to_response('view_category.html', {
-        'category': category,
-        'categoryposts': categoryposts,
-        'categories': categories,
-        'posts': posts,
-    },
-
+    return render_to_response('index.html', {
+        'chores': chores,
+        },
         context_instance=RequestContext(request)
     )
 
 
-@login_required()
-def edit_category(request, slug):
+def view_category(request, slug):
+    category = get_object_or_404(Category, slug=slug)
+    chores = Chores.objects.all()
 
-    if request.method == 'POST':
+    return render_to_response('view_category.html', {
+        'category': category,
+        'chores': chores,
+    },
 
-        if slug == 'newcategory':
-            form = CategoryForm(request.POST)
-        else:
-            form = CategoryForm(request.POST, instance=Category.objects.get(slug=slug))
-
-        if form.is_valid():
-            formcategory = form.save(commit=False)
-            formcategory.save()
-        return HttpResponseRedirect(reverse('index',))
-
-    else:
-        if slug == 'newcategory':
-            form = CategoryForm()
-        else:
-            post = Category.objects.get(slug=slug)
-            form = CategoryForm(instance=post)
-
-    return render_to_response('edit_category.html', {
-        'form': form},
-        context_instance=RequestContext(request))
+        context_instance=RequestContext(request)
+    )
 
 
 @login_required()
@@ -151,7 +58,7 @@ def profile(request, slug):
     user = request.user
 
     if request.method == 'POST':
-        form = BlogForm(request.POST)
+        form = ChoresForm(request.POST)
 
         if form.is_valid():
             formpost = form.save(commit=False)
@@ -161,14 +68,12 @@ def profile(request, slug):
         return HttpResponseRedirect(reverse('profile', args=[request.user]))
 
     else:
-        form = BlogForm()
+        form = ChoresForm()
 
-    posts = Blog.objects.filter(user_id=user.id)
-    comments = Comment.objects.filter(user_id=user.id)
+    chores = Chores.objects.filter(user_id=user.id)
 
     return render_to_response('profile.html', {
-        'posts': posts,
-        'comments': comments,
+        'chores': chores,
         'form': form,
         },
         context_instance=RequestContext(request)
@@ -181,7 +86,7 @@ def generate_post_form(request, slug):
     if request.method == 'POST':
 
         if slug == 'newpost':
-            form = BlogForm(request.POST)
+            form = ChoresForm(request.POST)
 
             if form.is_valid():
                 formpost = form.save(commit=False)
@@ -190,7 +95,7 @@ def generate_post_form(request, slug):
                 formpost.save()
             return HttpResponseRedirect(reverse('profile', args=[request.user]))
         else:
-            form = BlogForm(request.POST, instance=Blog.objects.get(slug=slug))
+            form = ChoresForm(request.POST, instance=Chores.objects.get(slug=slug))
 
             if form.is_valid():
                 formpost = form.save(commit=False)
@@ -198,17 +103,17 @@ def generate_post_form(request, slug):
                 formpost.edited = datetime.now()
                 formpost.save()
 
-            post = Blog.objects.get(slug=slug)
-            form = BlogForm(instance=post)
+            post = Chores.objects.get(slug=slug)
+            form = ChoresForm(instance=post)
 
             return form
 
     else:
         if slug == 'newpost':
-            form = BlogForm()
+            form = ChoresForm()
         else:
-            post = Blog.objects.get(slug=slug)
-            form = BlogForm(instance=post)
+            post = Chores.objects.get(slug=slug)
+            form = ChoresForm(instance=post)
         return form
 
 
@@ -217,7 +122,7 @@ def edit_post(request, slug):
     # form = generate_post_form(request, slug)
 
     if request.method == 'POST':
-        form = BlogForm(request.POST, instance=Blog.objects.get(slug=slug))
+        form = ChoresForm(request.POST, instance=Chores.objects.get(slug=slug))
 
         if form.is_valid():
             formpost = form.save(commit=False)
@@ -225,25 +130,15 @@ def edit_post(request, slug):
             formpost.edited = datetime.now()
             formpost.save()
 
-        post = Blog.objects.get(slug=slug)
-        form = BlogForm(instance=post)
+        post = Chores.objects.get(slug=slug)
+        form = ChoresForm(instance=post)
 
     else:
-        post = Blog.objects.get(slug=slug)
-        form = BlogForm(instance=post)
+        post = Chores.objects.get(slug=slug)
+        form = ChoresForm(instance=post)
 
     return render_to_response('edit_post.html', {'form': form, },
                               context_instance=RequestContext(request))
-
-
-@login_required()
-def delete_comment(request, slug):
-    Comment.objects.filter(slug=slug).delete()
-
-    post = get_object_or_404(Blog, slug=slug)
-    return render_to_response('view_post.html', {
-        'post': post},
-        context_instance=RequestContext(request)) + '#comments'
 
 
 def register(request):
@@ -294,14 +189,6 @@ def loggedout(request):
         context_instance=RequestContext(request)
     )
 
-def category_count():
-    categories = Category.objects.extra(select={'total': 'select count(bb.category_id) ' +
-                                                         'from blog_blog bb ' +
-                                                         'where bb.category_id = blog_category.id ' +
-                                                         'and bb.published = True '
-                                                })
-    return categories
-
 
 def search(request):
 
@@ -312,30 +199,22 @@ def search(request):
             search_term = search_form.cleaned_data['search_term']
 
             categories = Category.objects.filter(title__icontains=search_term)
-            post_title = Blog.objects.filter(title__icontains=search_term)
-            post_body = Blog.objects.filter(body__icontains=search_term)
-            comments = Comment.objects.filter(comment__icontains=search_term)
+            post_title = Chores.objects.filter(title__icontains=search_term)
+            post_body = Chores.objects.filter(body__icontains=search_term)
 
             return render_to_response('search_results.html', {
                 'categories': categories,
                 'post_title': post_title,
                 'post_body': post_body,
-                'comments': comments,
             },
                 context_instance=RequestContext(request)
             )
 
     # this is the same code as in the index view. Can just call index view instead?
-    categories = category_count()
-    posts = Blog.objects.filter(published='True')
-    top3posts = Blog.objects.filter(published='True')[:3]
-    next3posts = Blog.objects.filter(published='True')[3:6]
+    chores = Chores.objects.all()
 
     return render_to_response('index.html', {
-        'categories': categories,
-        'posts': posts,
-        'top3posts': top3posts,
-        'next3posts': next3posts,
+        'chores': chores,
         },
         context_instance=RequestContext(request)
     )
