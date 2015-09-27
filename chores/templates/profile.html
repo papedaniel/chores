@@ -3,6 +3,27 @@
 {% load chores_extras %}
 
 {% block content %}
+<div class="container-fluid">
+    <button type="button" class="btn" data-toggle="collapse" data-target=".newpost-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+    <div class="newpost-collapse collapse">
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ form }}
+            <p>
+                <input class="btn" type="submit" value="Post &raquo;" id="submit"/>
+            </p>
+        </form>
+    </div>
+</div>
+
+<hr noshade>
+<hr noshade>
+
+
 {% for chore in chores %}
     <div class="row-fluid">
         <div class="span12">

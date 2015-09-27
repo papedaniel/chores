@@ -65,7 +65,7 @@
         <entry file="file://$PROJECT_DIR$/chores/templates/profile.html">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.28668943">
-              <caret line="14" column="120" selection-start-line="14" selection-start-column="120" selection-end-line="14" selection-end-column="120" />
+              <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -697,7 +697,7 @@
     <entry file="file://$PROJECT_DIR$/chores/templates/profile.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.28668943">
-          <caret line="14" column="120" selection-start-line="14" selection-start-column="120" selection-end-line="14" selection-end-column="120" />
+          <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
           <folding />
         </state>
       </provider>
