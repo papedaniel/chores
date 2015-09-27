@@ -1,13 +1,12 @@
 from django.db import models
 from django.db.models import permalink
 from django.template.defaultfilters import slugify
-from django.utils import timezone
+from datetime import datetime
 from django.contrib.auth.models import User
-
 
 class History(models.Model):
     chore = models.ForeignKey('chores.Chores')
-    complete_date = models.DateTimeField(default=timezone.now)
+    complete_date = models.DateTimeField(default=datetime.now)
     user = models.ForeignKey(User, null=True, blank=True)
 
     class Meta:
@@ -17,10 +16,6 @@ class History(models.Model):
         return '{} {}'.format(self.comment, self.blog)
 
 
-def last_year():
-    return timezone.now() - timezone.timedelta(days=365)
-
-
 class Chores(models.Model):
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
@@ -28,7 +23,7 @@ class Chores(models.Model):
     primary_assignee = models.ForeignKey(User, related_name='primary_assignee')
     secondary_assignee = models.ForeignKey(User, null=True, blank=True, related_name='secondary_assignee')
     frequency_in_days = models.IntegerField(default=0)
-    last_completed_date = models.DateTimeField(default=last_year)
+    last_completed_date = models.DateTimeField(default=datetime.now)
     last_completed_by = models.ForeignKey(User, related_name='last_completed_by')
 
     def save(self, *args, **kwargs):
