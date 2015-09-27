@@ -3,17 +3,15 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import UserCreationForm
 from django.core.context_processors import csrf
 from datetime import datetime
 
-
-# Create your views here.
-
 from chores.models import Chores, Category
 
 
+@user_passes_test(lambda u: u.is_superuser, login_url='profile')
 def index(request):
 
     chores = Chores.objects.all()
@@ -22,18 +20,6 @@ def index(request):
     return render_to_response('index.html', {
         'chores': chores,
         'search_form': search_form,
-        },
-        context_instance=RequestContext(request)
-    )
-
-
-def view_post(request, slug):
-    post = get_object_or_404(Chores.objects.filter(slug=slug))
-
-    chores = Chores.objects.all()
-
-    return render_to_response('index.html', {
-        'chores': chores,
         },
         context_instance=RequestContext(request)
     )
@@ -54,7 +40,6 @@ def view_category(request, slug):
 
 @login_required()
 def profile(request, slug):
-
     user = request.user
 
     if request.method == 'POST':
@@ -62,8 +47,7 @@ def profile(request, slug):
 
         if form.is_valid():
             formpost = form.save(commit=False)
-            formpost.user = request.user
-            formpost.edited = datetime.now()
+            formpost.last_completed_by = request.user
             formpost.save()
         return HttpResponseRedirect(reverse('profile', args=[request.user]))
 
@@ -82,7 +66,6 @@ def profile(request, slug):
 
 @login_required()
 def generate_post_form(request, slug):
-
     if request.method == 'POST':
 
         if slug == 'newpost':
@@ -119,8 +102,6 @@ def generate_post_form(request, slug):
 
 @login_required()
 def edit_post(request, slug):
-    # form = generate_post_form(request, slug)
-
     if request.method == 'POST':
         form = ChoresForm(request.POST, instance=Chores.objects.get(slug=slug))
 
@@ -139,7 +120,6 @@ def edit_post(request, slug):
 
     return render_to_response('edit_post.html', {'form': form, },
                               context_instance=RequestContext(request))
-
 
 def register(request):
     if request.method == 'POST':
@@ -178,7 +158,7 @@ def notauthorized(request):
 
 def loggedin(request):
     return render_to_response(
-        'registration/loggedin.html',
+        'registration/profile.html',
         context_instance=RequestContext(request)
     )
 
@@ -210,7 +190,6 @@ def search(request):
                 context_instance=RequestContext(request)
             )
 
-    # this is the same code as in the index view. Can just call index view instead?
     chores = Chores.objects.all()
 
     return render_to_response('index.html', {

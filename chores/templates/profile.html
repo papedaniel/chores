@@ -1,65 +1,23 @@
 {% extends 'base.html' %}
 {% load markdown_deux_tags %}
+{% load chores_extras %}
 
 {% block content %}
-{% if user.is_superuser %}
-
-<div class="container-fluid">
-    <button type="button" class="btn" data-toggle="collapse" data-target=".newpost-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-    </button>
-    <div class="newpost-collapse collapse">
-        <form method="POST" action="">
-            {% csrf_token %}
-            {{ form.id }}
-            {{ form.title }}<br>
-            {{ form.category.label }}: {{ form.category }}<br>
-            <p>
-                <input class="btn" type="submit" value="Post &raquo;" id="submit"/>
-            </p>
-        </form>
-    </div>
-</div>
-
-<hr noshade>
-<hr noshade>
-
-<h3>Your Posts</h3>
-<div class="row-fluid">
-    <div class="span12">
-        {% for post in posts %}
-            <p><b>{{ post.title }} |</b>
-            {% if post.published %}
-                <span style="color:lightgreen; font-weight:bold">Published</span> |
-            {% else %}
-                <span style="color:#FFAAAA; font-weight:bold">Draft</span> |
-            {% endif %}
-            {{ post.category }} |
-            {{ post.posted }} |
-                <a class="btn" href="{% url 'edit_post' post.slug %}">Edit Post &raquo;</a>
-                <a class="btn" href="{% url 'view_blog_post' post.slug %}">{% if post.published %}View Post &raquo;{% else %}View Draft &raquo;{% endif %}</a>
-                <hr noshade>
-        {% endfor %}
-
-    </div><!--/span-->
-</div><!--/row-->
-
-<hr noshade>
-<hr noshade>
-{% endif %}
-
-<h3>Your Comments</h3>
-<div class="row-fluid">
-    <div class="span12">
-        {% for comment in comments %}
-            <p><b>{{ comment.blog.title }} |</b>
-            {{ comment.publishDate }}<br>
-            {{ comment.comment }}
-        {% endfor %}
-    </div><!--/span-->
-</div><!--/row-->
+{% for chore in chores %}
+    <div class="row-fluid">
+        <div class="span12">
+            <h3>{{ chore.title }}</h3>
+            <p class="small-caps-header">{{ chore.category }}</p>
+            <p>Primary assignee: <span class="small-caps-header">{{ chore.primary_assignee }}</span></p>
+            <p>Secondary assignee: <span class="small-caps-header">{{ chore.secondary_assignee }}</span></p>
+            <p>Last Completed by <span class="small-caps-header">{{ chore.last_completed_by }}</span> on
+            <span class="small-caps-header">{{ chore.last_completed_date }}</span></p>
+            <p>Overdue by: <span class="small-caps-header">{{ chore.last_completed_date|overdue:chore.frequency_in_days }} days</span></p>
+            <p><a class="btn" href="">Mark Done &raquo;</a></p>
+            <hr>
+        </div><!--/span-->
+    </div><!--/row-->
+{% endfor %}
 
 {% endblock %}
 

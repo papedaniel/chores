@@ -22,7 +22,19 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes />
+    <loaded-nodes>
+      <connection connection-id="f604d923-d795-4f41-8cc9-43ca1d85d4c2">
+        <schema name="public" object-types="column, constraint, function, index, sequence, table, trigger, view" />
+      </connection>
+    </loaded-nodes>
+  </component>
+  <component name="DBNavigator.Project.DatabaseConsoleManager">
+    <connection id="f604d923-d795-4f41-8cc9-43ca1d85d4c2">
+      <console name="chores" type="STANDARD" />
+    </connection>
+  </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-list connection-id="f604d923-d795-4f41-8cc9-43ca1d85d4c2" dataset="public.chores_chores" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.MethodExecutionManager">
     <method-browser />
@@ -43,7 +55,84 @@
     <recently-used-interfaces />
   </component>
   <component name="DBNavigator.Project.Settings">
-    <connections />
+    <connections>
+      <connection id="f604d923-d795-4f41-8cc9-43ca1d85d4c2" active="true">
+        <database>
+          <name value="chores" />
+          <description value="chores" />
+          <database-type value="POSTGRES" />
+          <config-type value="BASIC" />
+          <database-version value="9.4" />
+          <driver-source value="BUILTIN" />
+          <driver-library value="" />
+          <driver value="" />
+          <host value="ec2-54-163-228-109.compute-1.amazonaws.com" />
+          <port value="5432" />
+          <database value="d63dddljic34v0" />
+          <url-type value="DATABASE" />
+          <os-authentication value="false" />
+          <user value="einfbccfwuwrdi" />
+          <password value="SlhfdnBvLTZKcTNGNy1mQm0zLW0zd3htb3c=" />
+        </database>
+        <properties>
+          <auto-commit value="false" />
+          <properties>
+            <property key="ssl" value="sslmode=require" />
+          </properties>
+        </properties>
+        <ssh-settings>
+          <active value="false" />
+          <proxy-host value="" />
+          <proxy-port value="22" />
+          <proxy-user value="" />
+          <proxy-password value="" />
+          <auth-type value="PASSWORD" />
+          <key-file value="" />
+          <key-passphrase value="" />
+        </ssh-settings>
+        <details>
+          <charset value="UTF-8" />
+          <ddl-file-binding value="true" />
+          <database-logging value="true" />
+          <environment-type value="default" />
+          <idle-time-to-disconnect value="30" />
+          <password-expiry-time value="10" />
+          <max-connection-pool-size value="7" />
+          <alternative-statement-delimiter value="" />
+          <connect-automatically value="true" />
+        </details>
+        <object-filters hide-empty-schemas="false">
+          <object-type-filter use-master-settings="true">
+            <object-type name="SCHEMA" enabled="true" />
+            <object-type name="USER" enabled="true" />
+            <object-type name="ROLE" enabled="true" />
+            <object-type name="PRIVILEGE" enabled="true" />
+            <object-type name="CHARSET" enabled="true" />
+            <object-type name="TABLE" enabled="true" />
+            <object-type name="VIEW" enabled="true" />
+            <object-type name="MATERIALIZED VIEW" enabled="true" />
+            <object-type name="NESTED TABLE" enabled="true" />
+            <object-type name="COLUMN" enabled="true" />
+            <object-type name="INDEX" enabled="true" />
+            <object-type name="CONSTRAINT" enabled="true" />
+            <object-type name="TRIGGER" enabled="true" />
+            <object-type name="TRIGGER" enabled="true" />
+            <object-type name="SYNONYM" enabled="true" />
+            <object-type name="SEQUENCE" enabled="true" />
+            <object-type name="PROCEDURE" enabled="true" />
+            <object-type name="FUNCTION" enabled="true" />
+            <object-type name="PACKAGE" enabled="true" />
+            <object-type name="TYPE" enabled="true" />
+            <object-type name="TYPE ATTRIBUTE" enabled="true" />
+            <object-type name="ARGUMENT" enabled="true" />
+            <object-type name="DIMENSION" enabled="true" />
+            <object-type name="CLUSTER" enabled="true" />
+            <object-type name="DBLINK" enabled="true" />
+          </object-type-filter>
+          <object-name-filters />
+        </object-filters>
+      </connection>
+    </connections>
     <browser-settings>
       <general>
         <display-mode value="TABBED" />
