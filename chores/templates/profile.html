@@ -16,14 +16,8 @@
             {{ form.id }}
             {{ form.title }}<br>
             {{ form.category.label }}: {{ form.category }}<br>
-            Check to publish: {{ form.published }}<br><br>
-            <hr noshade>
-            {{ form.body }}
-            {{ form.edited.as_hidden }}
-            <hr noshade>
             <p>
                 <input class="btn" type="submit" value="Post &raquo;" id="submit"/>
-                <a class="btn" href="{% url 'profile' user.username %}">Cancel &raquo;</a>
             </p>
         </form>
     </div>

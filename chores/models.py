@@ -20,7 +20,11 @@ class Chores(models.Model):
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
     category = models.ForeignKey('chores.Category')
-    user = models.ForeignKey(User, null=True, blank=True)
+    primary_assignee = models.ForeignKey(User, null=True, blank=True, related_name='primary_assignee')
+    secondary_assignee = models.ForeignKey(User, null=True, blank=True, related_name='secondary_assignee')
+    frequency_in_days = models.IntegerField(default=0)
+    last_completed_date = models.DateTimeField(default=datetime.now)
+    last_completed_by = models.ForeignKey(User, null=True, blank=True, related_name='last_completed_by')
 
     def save(self, *args, **kwargs):
         if not self.id:

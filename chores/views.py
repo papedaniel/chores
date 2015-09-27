@@ -70,7 +70,7 @@ def profile(request, slug):
     else:
         form = ChoresForm()
 
-    chores = Chores.objects.filter(user_id=user.id)
+    chores = Chores.objects.filter(primary_assignee=user.id)
 
     return render_to_response('profile.html', {
         'chores': chores,

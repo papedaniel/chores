@@ -17,31 +17,15 @@
     <input type="submit" class="btn" value="Search &raquo;"/>
 </form>
 
-<div class="row-fluid">
-    {% for post in top3posts %}
-        <div class="span4">
-            <h3>{{ post.title }}</h3>
-            <p class="small-caps-header">{{ post.category }} - {{ post.posted|date }}</p>
-            {% markdown %}
-                {{ post.body | safe | slice:":250" }}{% if post.body|length > 250 %}...{% endif %}
-            {% endmarkdown %}
-            <p><a class="btn" href="{{ post.get_absolute_url }}">View full post &raquo;</a></p>
+{% for chore in chores %}
+    <div class="row-fluid">
+        <div class="span12">
+            <h3>{{ chore.title }}</h3>
+            <p class="small-caps-header">{{ chore.category }}</p>
+            <p><a class="btn" href="">Mark Done &raquo;</a></p>
             <hr>
         </div><!--/span-->
-    {% endfor %}
-</div><!--/row-->
-<div class="row-fluid">
-    {% for post in next3posts %}
-        <div class="span4">
-            <h3>{{ post.title }}</h3>
-            <p class="small-caps-header">{{ post.category }} - {{ post.posted|date }}</p>
-            {% markdown %}
-                {{ post.body | safe | slice:":250" }}{% if post.body|length > 250 %}...{% endif %}
-            {% endmarkdown %}
-            <p><a class="btn" href="{{ post.get_absolute_url }}">View full post &raquo;</a></p>
-            <hr noshade>
-        </div><!--/span-->
-    {% endfor %}
-</div><!--/row-->
+    </div><!--/row-->
+{% endfor %}
 
 {% endblock %}
