@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load markdown_deux_tags %}
+
+{% block title %}
+    <meta charset="utf-8">
+    <title>A Blog, for Blogging</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="this is a blog">
+    <meta name="author" content="Matthew Odle">
+{% endblock %}
+
+{% block content %}
+<div class="hero-unit">
+    <h1>Recent Posts!</h1>
+</div>
+
+<form action="{% url 'search' %}" method="POST">
+{% csrf_token %}
+    {{ search_form }}
+    <input type="submit" class="btn" value="Search &raquo;"/>
+</form>
+
+<div class="row-fluid">
+    {% for post in top3posts %}
+        <div class="span4">
+            <h3>{{ post.title }}</h3>
+            <p class="small-caps-header">{{ post.category }} - {{ post.posted|date }}</p>
+            {% markdown %}
+                {{ post.body | safe | slice:":250" }}{% if post.body|length > 250 %}...{% endif %}
+            {% endmarkdown %}
+            <p><a class="btn" href="{{ post.get_absolute_url }}">View full post &raquo;</a></p>
+            <hr>
+        </div><!--/span-->
+    {% endfor %}
+</div><!--/row-->
+<div class="row-fluid">
+    {% for post in next3posts %}
+        <div class="span4">
+            <h3>{{ post.title }}</h3>
+            <p class="small-caps-header">{{ post.category }} - {{ post.posted|date }}</p>
+            {% markdown %}
+                {{ post.body | safe | slice:":250" }}{% if post.body|length > 250 %}...{% endif %}
+            {% endmarkdown %}
+            <p><a class="btn" href="{{ post.get_absolute_url }}">View full post &raquo;</a></p>
+            <hr noshade>
+        </div><!--/span-->
+    {% endfor %}
+</div><!--/row-->
+
+{% endblock %}

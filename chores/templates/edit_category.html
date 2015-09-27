@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+<title>Edit Category</title>
+
+{% block title %}Edit Category{% endblock %}
+{% block content %}
+    <div id="content">
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ form.id }}
+            {{ form.title }}<br><br>
+            <input type="submit" value="Save" id="submit"/>
+        </form>
+    </div>
+{% endblock %}
+
+{% block navsidebar %}
+{% endblock %}

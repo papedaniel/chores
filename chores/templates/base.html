@@ -1,0 +1,110 @@
+{% include "stylesheets.html" %}
+{% load staticfiles %}
+
+<script type="text/javascript" src="{% static 'bootstrap/js/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap-transition.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap-alert.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap-modal.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap-dropdown.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap-scrollspy.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap-tab.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap-tooltip.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap-popover.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap-button.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap-collapse.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap-carousel.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap-typeahead.js' %}"></script>
+
+<html>
+<head>
+{% block title %}
+
+{% endblock %}
+</head>
+
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="brand" href="{% url 'index' %}">A Blog, for Blogging</a>
+            <div class="nav-collapse collapse">
+                <p class="navbar-text pull-right">
+                    {% if user.is_authenticated %}
+                        Logged in as <a href="#" class="navbar-link">{{ user.username }}</a>
+                        <a href="{% url 'logout' %}?next={% url 'loggedout' %}">Logout</a>
+                    {% else %}
+                        <a href="{% url 'login' %}">Login</a>
+                        <a href="{% url 'register' %}">Sign Up</a>
+                    {% endif %}
+                </p>
+                <ul class="nav">
+                    <li class="active"><a href="{% url 'index' %}">Home</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'profile' user.username %}">Your Profile</a></li>
+                    {% endif %}
+                    <!--<li><a href="#projects">Projects</a></li>-->
+                    <!--<li><a href="#about">About</a></li>-->
+                    <!--<li><a href="#contact">Contact</a></li>-->
+                    <!--<li><a href="#newsletter">Newsletter</a></li>-->
+                    <!--{% if user.is_superuser %}-->
+                        <!--<li><a href="{% url 'profile' user.username %}'#newpost'">New Post</a></li>-->
+                    <!--{% endif %}-->
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span9">
+            {% block content %}
+
+            {% endblock %}
+        </div><!--/row-->
+
+        {% block navsidebar %}
+            <div class="span3">
+                <div class="well sidebar-nav">
+                    <ul class="nav nav-list">
+                        <li class="nav-header">Categories</li>
+                        {% if categories %}
+                            {% for category in categories %}
+                                {% if category.total > 0 %}
+                                    <li>
+                                        <a href="{% url 'view_blog_category' category.slug %}">{{ category.title }} ({{ category.total }})</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <p>There are no categories.</p>
+                        {% endif %}
+                        <hr>
+                        <li class="nav-header">Recent Posts</li>
+                        {% if posts %}
+                            {% for post in posts %}
+                                <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+                            {% endfor %}
+                        {% else %}
+                            <li>There are no posts.</li>
+                        {% endif %}
+                    </ul>
+                </div><!--/.well -->
+            </div><!--/span3-->
+        {% endblock %}
+
+    </div><!--/row-->
+    <hr>
+    <footer>
+        <p>&copy; Modle 2015</p>
+    </footer>
+</div><!--/.fluid-container-->
+
+</body>
+</html>

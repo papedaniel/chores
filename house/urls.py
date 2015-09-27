@@ -1,0 +1,30 @@
+"""myproject URL Configuration
+"""
+
+from django.conf.urls import include, url
+from django.contrib import admin
+
+urlpatterns = [
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', 'chores.views.index', name='index'),
+    url(r'^chores/profile/(?P<slug>[^\.]+).html', 'chores.views.profile', name='profile'),
+    url(r'^chores/view/(?P<slug>[^\.]+).html', 'chores.views.view_post', name='view_post'),
+    url(r'^chores/category/(?P<slug>[^\.]+).html', 'chores.views.view_category', name='view_category'),
+    url(r'^chores/edit_post/(?P<slug>[^\.]+).html', 'chores.views.edit_post', name='edit_post'),
+    url(r'^chores/edit_category/(?P<slug>[^\.]+).html', 'chores.views.edit_category', name='edit_category'),
+    url(r'^chores/search_results.html', 'chores.views.search', name='search'),
+]
+
+
+urlpatterns += [
+    # Registration URLs
+    url(r'^accounts/register/$', 'myproject.views.register', name='register'),
+    url(r'^accounts/register/complete/$', 'myproject.views.registration_complete', name='registration_complete'),
+
+    # Auth-related URLs
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', name='logout'),
+    url(r'^accounts/loggedin/$', 'chores.views.loggedin', name='loggedin'),
+    url(r'^accounts/notauthorized/$', 'chores.views.notauthorized', name='notauthorized'),
+    url(r'^chores/loggedout/$', 'chores.views.loggedout', name='loggedout'),
+]

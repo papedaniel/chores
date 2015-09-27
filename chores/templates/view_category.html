@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load markdown_deux_tags %}
+
+{% block content %}
+    {% if categoryposts %}
+    <div class="hero-unit">
+        <h1>{{ category.title }}</h1>
+    </div>
+    <div class="row-fluid">
+        {% for post in categoryposts %}
+            <div class="span4">
+                <h3>{{ post.title }}</h3>
+                <p>{{ post.posted }}</p>
+                {% markdown %}
+                    {{ post.body | safe | slice:":250" }}{% if post.body|length > 250 %}...{% endif %}
+                {% endmarkdown %}
+                <p><a class="btn" href="{{ post.get_absolute_url }}">View details &raquo;</a></p>
+                <hr>
+            </div><!--/span-->
+        {% endfor %}
+    </div>
+    {% else %}
+        <p>There are no posts for this category.</p>
+    {% endif %}
+
+{% endblock %}
